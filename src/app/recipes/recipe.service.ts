@@ -4,7 +4,7 @@ import { ShoppingListService } from "../shopping-list/shopping-list.service";
 import { Recipe } from "./recipe.model";
 
 @Injectable()
-export class RecipesService{
+export class RecipeService{
     private recipes: Recipe[] = [
         new Recipe('Chicken salad',
         'This is a tasty chicken salad',
