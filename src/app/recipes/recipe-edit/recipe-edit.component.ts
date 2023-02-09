@@ -1,7 +1,7 @@
 import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -15,32 +15,54 @@ export class RecipeEditComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private recipeService: RecipeService) { }
 
-  ngOnInit(): void {
+  get controls() { // a getter!
+    return (<FormArray>this.recipeForm.get('ingredients')).controls;
+  }
+
+  ngOnInit() {
     this.route.params.subscribe(
       (params: Params) => {
          this.id = +params['id'];
-         this.editMode = params['id '] != null;
+         this.editMode = params['id'] != null;
          this.initForm();
        }
     )
   }
 
+  onSubmit(){
+    console.log(this.recipeForm);
+  }
+
   private initForm(){
     let recipeName = '';
-    let recipeImgPath = '';
+    let recipeImagePath = '';
     let recipeDescription = '';
+    let recipeIngredients = new FormArray<any>([]);
 
     if (this.editMode){
       const recipe = this.recipeService.getRecipe(this.id);
       recipeName = recipe.name;
-      recipeImgPath = recipe.imagePath;
+      recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
+      if (recipe['ingredients']){
+        for (let ingredient of recipe.ingredients){
+          recipeIngredients.push(
+            new FormGroup({
+              'name': new FormControl(ingredient.name),
+              'amount': new FormControl(ingredient.amount)
+            })
+          );
+        }
+      }
     }
+
+
 
     this.recipeForm = new FormGroup({
       'name': new FormControl(recipeName),
-      'imgPath': new FormControl(recipeImgPath),
-      'description': new FormControl(recipeDescription)
+      'imagePath': new FormControl(recipeImagePath),
+      'description': new FormControl(recipeDescription),
+      'ingredients': recipeIngredients
     });
   }
 
