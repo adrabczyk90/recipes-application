@@ -24,14 +24,10 @@ export class DataStorageService {
   }
 
   fetchRecipes(){
-    return this.authService.user.pipe(
-      take(1),
-      exhaustMap(user => {
       return this.http
       .get<Recipe[]>(
-        'https://ng-complete-guide-6bf78-default-rtdb.europe-west1.firebasedatabase.app/recipes.json?auth=' + user.token)
-
-    }),
+        'https://ng-complete-guide-6bf78-default-rtdb.europe-west1.firebasedatabase.app/recipes.json')
+    .pipe(
     map(recipes => {
         return recipes.map(recipe => {
           return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients: []};
