@@ -72,7 +72,7 @@ export class RecipeEditComponent implements OnInit {
     let recipeName = '';
     let recipeImagePath = '';
     let recipeDescription = '';
-    let recipeIngredients = new FormArray<any>([]);
+    const recipeIngredients = new FormArray<any>([]);
 
     if (this.editMode){
       const recipe = this.recipeService.getRecipe(this.id);
@@ -80,7 +80,7 @@ export class RecipeEditComponent implements OnInit {
       recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
       if (recipe['ingredients']){
-        for (let ingredient of recipe.ingredients){
+        for (const ingredient of recipe.ingredients){
           recipeIngredients.push(
             new FormGroup({
               'name': new FormControl(ingredient.name, Validators.required),
