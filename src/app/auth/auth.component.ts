@@ -43,6 +43,7 @@ export class AuthComponent implements OnInit{
     } else {
       this.store.dispatch(new AuthActions.SignupStart({email: email, password: password}))
     }
+
     form.reset();
   }
 
@@ -56,5 +57,4 @@ export class AuthComponent implements OnInit{
     }
 
   }
-
 }
